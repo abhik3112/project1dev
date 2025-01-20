@@ -1,8 +1,40 @@
-
+:root {
+  --primary-color: #FF0000;
+  --secondary-color: #333;
+  --background-color: #6c757d;
+  --text-color: #000000;
+}
+body{
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 15px;
+  color: var(--text-color);
+  background-color: var(--background-color);
+}
 
 #app {
-  max-width: 1280px;
+  max-width: 1000px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 20px;
   font-weight: normal;
+}
+
+.container{
+  --max-width: 1110px;
+  --padding: 5rem;
+
+  width: min(var(--max-width), 100% - (var(--padding) * 2));
+  margin-inline: auto;
+}
+.middle{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.vert{
+  display: flex;
+  flex-direction: column;
+}
+
+.home-block{
+  padding-block: 5rem;
 }
