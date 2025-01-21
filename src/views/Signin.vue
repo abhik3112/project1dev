@@ -27,11 +27,17 @@ function signIn (event) {
 		</nav>
 	</Header>
 
-	<main class="padding-block-700">
-		<section class="container center">
-			<button class="button" @click="signIn">Sign In</button>
-		</section>
-	</main>
+  <main class="home-block">
+    <section class="container center">
+      <form @submit="signIn">
+        <label for="username">User Name</label>
+        <input type="text" id="username" required>
+        <label for="password">Password</label>
+        <input type="password" id="password" required>
+        <label for="confirmpassword">Confirm Password</label>
+      </form>
+    </section>
+  </main>
 </template>
 
 <style scoped>

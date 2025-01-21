@@ -5,10 +5,14 @@ import { useRouter } from 'vue-router';
 const router = useRouter()
 
 function Join (event) {
+  const firstname = document.getElementById('firstname').value
+  const lastname = document.getElementById('lastname').value
+  const email = document.getElementById('email').value
   const username = document.getElementById('username').value
   const password = document.getElementById('password').value
+  const confirmpassword = document.getElementById('confirmpassword').value
 
-  if(username == "" || password == "") {
+  if(firstname == "" || lastname == "" || email == "" || username == "" || password == "" || confirmpassword == "") {
     alert('Please fill out all the empty spaces to join')
     return;
   }
@@ -31,10 +35,18 @@ function Join (event) {
   <main class="home-block">
     <section class="container center">
       <form @submit="Join">
-        <label for="username">Username</label>
+        <label for="firstname">First Name</label>
+        <input type="text" id="firstname" required>
+        <label for="lastname">Last Name</label>
+        <input type="text" id="lastname" required>
+        <label for="email">Email</label>
+        <input type="email" id="email" required>
+        <label for="username">User Name</label>
         <input type="text" id="username" required>
         <label for="password">Password</label>
         <input type="password" id="password" required>
+        <label for="confirmpassword">Confirm Password</label>
+        <input type="password" id="confirmpassword" required>
         <button class="button" type="submit">Join</button>
       </form>
     </section>

@@ -4,37 +4,54 @@
   --background-color: #6c757d;
   --text-color: #000000;
 }
-body{
-  font-family: 'Courier New', Courier, monospace;
-  font-size: 15px;
-  color: var(--text-color);
+body,
+html {
+  margin: 0;
+  font-family: sans-serif;
   background-color: var(--background-color);
 }
 
+.container {
+  display: flex;
+  gap: 0.625%;
+}
+
+a {
+  flex: 1;
+  text-decoration: none;
+  outline-color: transparent;
+  text-align: center;
+  line-height: 3;
+  color: var(--text-color);
+}
+
+a:link,
+a:visited,
+a:focus {
+  background: var(--background-color);
+  color: var(--text-color);
+}
+
+a:hover {
+  text-decoration-line: underline;
+  text-decoration-style: wavy;
+  text-decoration-color: lightblue;
+}
+
+a:active {
+  background: lightblue;
+  color: black;
+}
+
+h1{
+  text-decoration-line: underline;
+  text-decoration-style: wavy;
+  text-decoration-color: lightblue;
+  text-align: center;
+}
 #app {
   max-width: 1000px;
   margin: 0 auto;
   padding: 20px;
   font-weight: normal;
-}
-
-.container{
-  --max-width: 1110px;
-  --padding: 5rem;
-
-  width: min(var(--max-width), 100% - (var(--padding) * 2));
-  margin-inline: auto;
-}
-.middle{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.vert{
-  display: flex;
-  flex-direction: column;
-}
-
-.home-block{
-  padding-block: 5rem;
 }
