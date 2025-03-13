@@ -1,27 +1,74 @@
 <script setup>
+import { ref } from 'vue';
 import Header from '../components/Header.vue'
 import { useRouter } from 'vue-router';
 
 const router = useRouter()
 
-function Join (event) {
-  const firstname = document.getElementById('firstname').value
-  const lastname = document.getElementById('lastname').value
-  const email = document.getElementById('email').value
-  const username = document.getElementById('username').value
-  const password = document.getElementById('password').value
-  const confirmpassword = document.getElementById('confirmpassword').value
+const firstName = ref("")
+const lastName = ref("")
+const email = ref("")
+const userName = ref("")
+const password = ref("")
+const confirmpassword = ref("")
+const errormsg = ref("")
 
-  if(firstname == "" || lastname == "" || email == "" || username == "" || password == "" || confirmpassword == "") {
-    alert('Please fill out all the empty spaces to join')
-    return;
+async function Join(event) {
+  event.preventDefault()
+
+  if (!firstName.value || !lastName.value || !email.value || !userName.value || !password.value || !confirmpassword.value) {
+    errormsg.value = "Fill out all the fields"
+    return
+  }
+  if (password.value !== confirmpassword.value) {
+    errormsg.value = "Password does not match"
+    return
+  }
+  if (password.value.length < 8) {
+    errormsg.value = "Atleast 8 characters"
+    return
   }
 
-  localStorage.setItem('username', username)
+  const data = {
+    email: email.value,
+    userName: userName.value,
+    password: password.value,
+    firstName: firstName.value,
+    lastName: lastName.value
+  }
+  console.log(data)
 
-  router.push({
-		name: 'main'
-	})
+  const url = 'https://hap-app-api.azurewebsites.net/user'
+
+  const options = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  }
+
+  let response = await fetch(url, options)
+
+  if (response.status === 201) {
+    const data = await response.json()
+
+    localStorage.setItem("token", data.token)
+    localStorage.setItem("userName", data.user.userName)
+    localStorage.setItem('lastName', data.user.lastName)
+    localStorage.setItem('firstName', data.user.firstName)
+    localStorage.setItem('email', data.user.email)
+
+    router.push({
+      name: 'normal'
+    })
+  }
+  else if (response.status === 400) {
+    errormsg.value = "Invalid email or password"
+  }
+  else if (response.status === 500) {
+    errormsg.value = "Internal Server Error"
+  }
 }
 </script>
 
@@ -32,24 +79,35 @@ function Join (event) {
     </nav>
   </Header>
 
-  <main class="home-block">
-    <section class="container center">
-      <form @submit="Join">
-        <label for="firstname">First Name</label>
-        <input type="text" id="firstname" required>
-        <label for="lastname">Last Name</label>
-        <input type="text" id="lastname" required>
-        <label for="email">Email</label>
-        <input type="email" id="email" required>
-        <label for="username">User Name</label>
-        <input type="text" id="username" required>
-        <label for="password">Password</label>
-        <input type="password" id="password" required>
-        <label for="confirmpassword">Confirm Password</label>
-        <input type="password" id="confirmpassword" required>
-        <button class="button" type="submit">Join</button>
+  <main>
+    <div class="wrapper">
+      <form @submit.prevent="Join">
+        <h1>Join</h1>
+        <p v-if="errormsg" class="err">{{ errormsg }}</p>
+        <div class="input-box">
+          <input type="text" v-model="firstName" placeholder="First Name" unique required>
+        </div>
+        <div class="input-box">
+          <input type="text" v-model="lastName" placeholder="Last Name" required>
+        </div>
+        <div class="input-box">
+          <input type="email" v-model="email" placeholder="Email" required>
+        </div>
+        <div class="input-box">
+          <input type="text" v-model="userName" placeholder="Username" required>
+        </div>
+        <div class="input-box">
+          <input type="password" v-model="password" placeholder="Password" required>
+        </div>
+        <div class="input-box">
+          <input type="password" v-model="confirmpassword" placeholder="Confirm Password" required>
+        </div>
+        <button class="btn" type="submit">Join</button>
+        <div class="join-link">
+          <p>Already have a account? <RouterLink to="/signin">Sign in</RouterLink></p>
+        </div>
       </form>
-    </section>
+    </div>
   </main>
 </template>
 
@@ -57,7 +115,8 @@ function Join (event) {
 :deep(a) {
   text-decoration: none;
 }
-</style>
 
-<style scoped>
+.err {
+  color: brown;
+}
 </style>

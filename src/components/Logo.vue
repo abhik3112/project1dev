@@ -4,7 +4,7 @@
 
 <template>
     <div>
-        <img src="Spdrmn.jpeg">
+        <img src="../public/Spiderlogo.png" alt="Spider App">
     </div>
 </template>
 

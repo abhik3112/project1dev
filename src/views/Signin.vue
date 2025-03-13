@@ -1,47 +1,95 @@
 <script setup>
 import { useRouter } from 'vue-router'
+import Header from '@/components/Header.vue'
+import { ref } from 'vue'
 
 const router = useRouter()
 
-function signIn (event) {
-  const username = document.getElementById('username').value
-  const password = document.getElementById('password').value
+const email = ref("")
+const password = ref("")
+const errormsg = ref("")
 
-  if(username == "" || password == "") {
-    alert('Please fill out all the empty spaces to join')
-    return;
+async function signIn(event) {
+  event.preventDefault()
+
+  if(!email.value|| !password.value){
+    errormsg.value = "Please enter your email and password."
+    return
   }
 
-  localStorage.setItem('username', username)
+  const data = { email: email.value, password: password.value }
 
-	router.push({
-		name: 'main'
-	})
+  const url = 'https://hap-app-api.azurewebsites.net/user/login'
+
+  const options = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  }
+
+  let response = await fetch(url, options)
+
+  if (response.status === 200) {
+    const data = await response.json()
+
+    localStorage.setItem("token", data.token)
+    localStorage.setItem("userName", data.user.userName)
+
+    router.push({
+      name: 'normal'
+    })
+  }
+  else if (response.status === 400) {
+    errormsg.value = "Invalid email or password"
+    console.log("Invalid email or password.")
+  }
+  else if (response.status === 500) {
+    errormsg.value = "Internal Server Error"
+    console.log("Internal Server Error")
+  }
 }
+
+
 </script>
 
 <template>
-	<Header>
-		<nav>
-			<RouterLink to="/">Home</RouterLink>
-		</nav>
-	</Header>
+  <Header>
+    <nav>
+      <RouterLink to="/">Home</RouterLink>
+    </nav>
+  </Header>
 
-  <main class="home-block">
-    <section class="container center">
-      <form @submit="signIn">
-        <label for="username">User Name</label>
-        <input type="text" id="username" required>
-        <label for="password">Password</label>
-        <input type="password" id="password" required>
-        <label for="confirmpassword">Confirm Password</label>
+  <main>
+    <div class="wrapper">
+      <form @submit.prevent="signIn">
+        <h1>Sign in</h1>
+        <p v-if="errormsg" class="err">{{ errormsg }}</p>
+        <div class="input-box">
+          <input type="email" v-model = "email" placeholder="Email" required>
+        </div>
+        <div class="input-box">
+          <input type="password" v-model = "password" placeholder="Password" required>
+        </div>
+        <div class="remember-forgot">
+          <label><input type="checkbox">Remember me</label>
+        </div>
+        <button class="btn" type="submit">Sign In</button>
+        <div class="join-link">
+          <p>Do not have a account? <RouterLink to="/join">Join</RouterLink></p>
+        </div>
       </form>
-    </section>
+
+    </div>
   </main>
 </template>
 
 <style scoped>
 :deep(a) {
 	text-decoration: none;
+}
+.err{
+  color: red;
 }
 </style>
