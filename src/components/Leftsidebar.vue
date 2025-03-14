@@ -1,6 +1,10 @@
 <script setup>
 import { ref } from 'vue';
 import { RouterLink } from 'vue-router'
+import { userUserStore } from '@/router/user';
+
+const userStore = userUserStore()
+//const {firstName, lastName}
 
 const errormsg = ref("")
 const userName = localStorage.getItem("userName");

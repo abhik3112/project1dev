@@ -17,16 +17,19 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: Home,
+      meta: { authRequired: false },
     },
     {
       path: '/signin',
       name: 'signin',
       component: SignIn,
+      meta: { authRequired: false },
     },
     {
       path: '/join',
       name: 'join',
       component: Join,
+      meta: { authRequired: false },
     },
     {
       path: '/main',
@@ -40,8 +43,8 @@ const router = createRouter({
             LeftSidebar: Left,
             Middle: message,
             RightSidebar: Right,
-
-          }
+          },
+          meta: { authRequired: false },
         },
         {
           path: '/user',
@@ -53,7 +56,7 @@ const router = createRouter({
 
           },
           props: true,
-          authRequired:false,
+          meta: { authRequired: true },
         },
         {
           path: '/user/:userId',
@@ -64,7 +67,7 @@ const router = createRouter({
             RightSidebar: Chat,
           },
           props: true,
-          authRequired:false,
+          meta: { authRequired: true },
         },
       ]
     }
