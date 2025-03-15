@@ -7,6 +7,7 @@ export const userUserStore = defineStore ('user', () => {
   const userName = ref('')
   const email = ref('')
   const password = ref('')
+  const token = ref("")
 
   const wholeName = computed(() => firstName.value + ' ' + lastName.value)
 
@@ -18,6 +19,16 @@ export const userUserStore = defineStore ('user', () => {
     password.value = pssrd ?? ''
   }
 
-
-  return {firstName, lastName, userName, email, wholeName, password, setUser}
+  function setToken(tkn) {
+    token.value = tkn
+  }
+  function $reset() {
+    firstName.value = ''
+    lastName.value = ''
+    userName.value = ''
+    email.value = ''
+    password.value = ''
+    token.value = ''
+  }
+  return {firstName, lastName, userName, email, wholeName, password, token, setUser, setToken, $reset}
 })

@@ -4,16 +4,15 @@ import { RouterLink } from 'vue-router'
 import { userUserStore } from '@/router/user';
 
 const userStore = userUserStore()
-//const {firstName, lastName}
 
 const errormsg = ref("")
-const userName = localStorage.getItem("userName");
+const userName = userStore.userName
 
 const users = ref([])
 const search = ref("")
 
 async function getusers() {
-  const token = localStorage.getItem("token")
+  const token = userStore.token
 
   const url = `https://hap-app-api.azurewebsites.net/users?search=userName:${search.value}&sortBy=userName:asc`
 

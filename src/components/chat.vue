@@ -1,15 +1,18 @@
 <script setup>
 import { onMounted, ref } from 'vue'
+import { userUserStore } from '@/router/user'
+
 const props = defineProps({ userId: String })
 
 const textMessage = ref('')
+const userStore = userUserStore()
 const errormsg = ref('')
 const mess = ref([
 
 ])
 
 async function getMessages() {
-  const token = localStorage.getItem("token")
+  const token = userStore.token
 
 const url = `https://hap-app-api.azurewebsites.net/messages/${props.userId}`
 
@@ -38,7 +41,7 @@ if(response.status === 500) {
 }
 
 async function postMessage() {
-  const token = localStorage.getItem("token")
+  const token = userStore.token
 
   const url = `https://hap-app-api.azurewebsites.net/message/${props.userId}`
 

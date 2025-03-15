@@ -2,9 +2,11 @@
 import Header from '@/components/Header.vue'
 import { ref } from 'vue';
 import { RouterView, useRouter } from 'vue-router'
+import { userUserStore } from '@/router/user';
 
 const errormsg = ref("")
 const router = useRouter()
+const userStore = userUserStore()
 
 async function Prfl() {
   router.push({
@@ -19,7 +21,7 @@ async function Prflback() {
 }
 async function signOut() {
 
-  const token = localStorage.getItem("token")
+  const token = userStore.token
 
   const url = 'https://hap-app-api.azurewebsites.net/user/logout'
 
@@ -34,8 +36,7 @@ async function signOut() {
 
   if (response.ok) {
     if (response.status === 200) {
-      localStorage.removeItem('token')
-      localStorage.removeItem("userName")
+      userStore.$reset()
 
       router.push({
         name: 'home'
@@ -51,7 +52,7 @@ async function dlt() {
     return;
   }
 
-  const token = localStorage.getItem("token")
+  const token = userStore.token
 
   if (!token) {
     errormsg.value = "No token found"
@@ -70,7 +71,7 @@ async function dlt() {
   let response = await fetch(url, options)
 
   if (response.status === 200) {
-    localStorage.clear();
+    userStore.$reset()
 
     router.push({
       name: 'home'

@@ -2,8 +2,10 @@
 import { ref } from 'vue';
 import Header from '../components/Header.vue'
 import { useRouter } from 'vue-router';
+import { userUserStore } from '@/router/user';
 
 const router = useRouter()
+const userStore = userUserStore()
 
 const firstName = ref("")
 const lastName = ref("")
@@ -53,11 +55,11 @@ async function Join(event) {
   if (response.status === 201) {
     const data = await response.json()
 
-    localStorage.setItem("token", data.token)
-    localStorage.setItem("userName", data.user.userName)
-    localStorage.setItem('lastName', data.user.lastName)
-    localStorage.setItem('firstName', data.user.firstName)
-    localStorage.setItem('email', data.user.email)
+    userStore.setUser('firstName', data.user.firstName)
+    userStore.setUser("userName", data.user.userName)
+    userStore.setUser('lastName', data.user.lastName)
+    userStore.setUser('firstName', data.user.firstName)
+    userStore.setUser('email', data.user.email)
 
     router.push({
       name: 'normal'
