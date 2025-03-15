@@ -2,8 +2,10 @@
 import { useRouter } from 'vue-router'
 import Header from '@/components/Header.vue'
 import { ref } from 'vue'
+import { userUserStore } from '@/router/user'
 
 const router = useRouter()
+const userStore = userUserStore()
 
 const email = ref("")
 const password = ref("")
@@ -34,8 +36,8 @@ async function signIn(event) {
   if (response.status === 200) {
     const data = await response.json()
 
-    localStorage.setItem("token", data.token)
-    localStorage.setItem("userName", data.user.userName)
+    userStore.setToken("token", data.token)
+    userStore.setUser("userName", data.user.userName)
 
     router.push({
       name: 'normal'
